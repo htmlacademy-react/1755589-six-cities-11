@@ -1,13 +1,14 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { getDataOffers, setCity, setDataOffersLoadingStatus, setOffers, setSortingValue } from './action';
+import { setDataOffers, setAuthorizationStatus, setCity, setDataOffersLoadingStatus, setOffers, setSortingValue } from './action';
 import { Offer } from '../types/offer';
-import { SortingValues } from '../const';
+import { AuthStatuses, SortingValues } from '../const';
 
  type initialType = {
   activeCity: string;
   offers: Offer[];
   sortingValue: string;
   isDataOffersLoading: boolean;
+  authorizationStatus: AuthStatuses;
  }
 
 const initialState: initialType = {
@@ -15,6 +16,7 @@ const initialState: initialType = {
   offers: [],
   sortingValue: SortingValues.Popular,
   isDataOffersLoading: false,
+  authorizationStatus: AuthStatuses.Uknown,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -31,8 +33,11 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(setDataOffersLoadingStatus, (state, action: PayloadAction<boolean>) => {
       state.isDataOffersLoading = action.payload;
     })
-    .addCase(getDataOffers, (state, action: PayloadAction<Offer[]>) => {
+    .addCase(setDataOffers, (state, action: PayloadAction<Offer[]>) => {
       state.offers = action.payload;
+    })
+    .addCase(setAuthorizationStatus, (state, action: PayloadAction<AuthStatuses>) => {
+      state.authorizationStatus = action.payload;
     });
 });
 

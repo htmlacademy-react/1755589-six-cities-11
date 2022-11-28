@@ -7,16 +7,17 @@ import MapComponent from '../../components/map-component/map-component';
 import { Comment } from '../../types/comment';
 import { Offer } from '../../types/offer';
 import { getRating } from '../../utils/index';
+import { useAppSelector } from '../../hooks';
 
 type RoomPageProps = {
-  offers: Offer[];
   comments: Comment[];
   nearbyOffers: Offer[];
 } & HTMLAttributes<HTMLTextAreaElement>
 
 function RoomPage( props: RoomPageProps) {
-  const { offers, comments, nearbyOffers } = props;
+  const { comments, nearbyOffers } = props;
   const { id } = useParams<{id:string}>();
+  const offers = useAppSelector((state) => state.offers);
   const theOffer = offers.find((offer) => offer.id.toString() === id);
 
   if (!theOffer) {

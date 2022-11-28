@@ -1,12 +1,8 @@
 import FavoritesComponent from '../../components/favorites-component/favorites-component';
-import { Offer } from '../../types/offer';
+import { useAppSelector } from '../../hooks';
 
-type FavoritesPageProps = {
-  offers: Offer[];
-}
-
-function FavoritesPage(props: FavoritesPageProps) {
-  const { offers } = props;
+function FavoritesPage() {
+  const offers = useAppSelector((state) => state.offers);
 
   return(
     <div className="page">

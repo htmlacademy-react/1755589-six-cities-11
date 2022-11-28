@@ -45,5 +45,7 @@ export const REQUES_TIMEOUT = 5000;
 export const AUTH_TOKEN_KEY = 'offers-token';
 
 export enum ApiRouts {
-  Offers = '/hotels'
+  Offers = '/hotels',
+  Login = '/login',
+  Logout = '/logout',
 }

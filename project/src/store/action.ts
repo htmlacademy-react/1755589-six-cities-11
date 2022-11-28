@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+import { AuthStatuses } from '../const';
 import { Offer } from '../types/offer';
 
 export const setCity = createAction('setCity',
@@ -13,10 +14,17 @@ export const setSortingValue = createAction('setSortingValue',
   (sortingValue: string) => ({payload: sortingValue})
 );
 
-export const getDataOffers = createAction('getDataOffers',
+export const setDataOffers = createAction('getDataOffers',
   (data: Offer[]) => ({payload: data})
 );
 
 export const setDataOffersLoadingStatus = createAction('setDataOffersLoadingStatus',
   (status: boolean) => ({payload: status})
 );
+
+export const setAuthorizationStatus = createAction('setAathorizationStatus',
+  (authStatus: AuthStatuses) => ({payload: authStatus})
+);
+
+export const redirectToRoute = createAction('redirectToRoute',
+  (route: string) => ({payload: route}));

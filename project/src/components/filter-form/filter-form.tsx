@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import { SortingValues } from '../../const';
 import { setSortingValue } from '../../store/action';
 import { useAppDispatch } from '../../hooks';
@@ -15,12 +15,10 @@ function FilterFormComponent({currentValue}: FilterFormComponentProps) {
     setOpened(!isOpened);
   };
 
-  const handleSortingValues = (evt: MouseEvent<HTMLElement>) => {
-    evt.preventDefault();
-    const textContent = evt.currentTarget.dataset.value;
+  const handleSortingValues = (value: string) => {
 
-    if(textContent) {
-      dispatch(setSortingValue(textContent));
+    if(value) {
+      dispatch(setSortingValue(value));
     }
   };
 
@@ -33,7 +31,7 @@ function FilterFormComponent({currentValue}: FilterFormComponentProps) {
         </svg>
       </span>
       <ul className={`places__options places__options--custom places__options${isOpened ? '--opened' : ''}`} >
-        {Object.values(SortingValues).map((value) => (<li className={`places__option places__option${currentValue === value ? '--active' : ''}`} data-value={value} key={value} tabIndex={0} onClick={handleSortingValues}>{value}</li>))}
+        {Object.values(SortingValues).map((value) => (<li className={`places__option places__option${currentValue === value ? '--active' : ''}`} key={value} tabIndex={0} onClick={() => handleSortingValues(value)}>{value}</li>))}
       </ul>
     </form>
   );

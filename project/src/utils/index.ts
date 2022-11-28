@@ -1,10 +1,9 @@
 import { InputValues, TitleValues, SortingValues } from '../const';
 import { Offer } from '../types/offer';
 
-export const getRating = (value: number) => {
-  const max = 5;
-  return (Math.round(value) / max) * 100;
-};
+const MAX = 5;
+
+export const getRating = (value: number) => (Math.round(value) / MAX) * 100;
 
 export const setRating = (value: number) => {
   switch(true) {

@@ -2,10 +2,12 @@ import MapComponent from '../../components/map-component/map-component';
 import OffersList from '../../components/offers-list/offers-list';
 import { useState } from 'react';
 import CitiesListComponent from '../../components/cities-list/cities-list-component';
-import { CITIES_LIST } from '../../const';
+import { AuthStatuses, CITIES_LIST } from '../../const';
 import { useAppSelector } from '../../hooks';
 import FilterFormComponent from '../../components/filter-form/filter-form';
 import { getSortingValues } from '../../utils';
+import LoginHeader from '../../components/login/login-header';
+import LogoutHeader from '../../components/login/logout-header';
 
 
 function MainPage() {
@@ -14,6 +16,19 @@ function MainPage() {
   let offersByCity = useAppSelector((state) => state.offers.filter((offer) => offer.city.name === city));
   const currentValue = useAppSelector((state) => state.sortingValue);
   offersByCity = getSortingValues([...offersByCity], currentValue);
+  const isAuthStatus = useAppSelector((state) => state.authorizationStatus);
+
+  const setHeader = (authStatus: AuthStatuses ) => {
+    let header: JSX.Element | null = null;
+    if(authStatus === AuthStatuses.Auth) {
+      header = <LoginHeader/>;
+    }
+    else{
+      header = <LogoutHeader/>;
+    }
+    return header;
+  };
+
 
   return(
     <div className="page page--gray page--main">
@@ -25,23 +40,7 @@ function MainPage() {
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width={81} height={41} />
               </a>
             </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            {setHeader(isAuthStatus)}
           </div>
         </div>
       </header>
