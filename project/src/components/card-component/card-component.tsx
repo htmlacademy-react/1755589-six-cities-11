@@ -2,6 +2,9 @@ import { Offer } from '../../types/offer';
 import { getRating } from '../../utils/index';
 import { HTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
+import { fetchPostFavOffers } from '../../store/api-actions';
+import { setFavoritesCity } from '../../store/actions';
 
 type CardComponentProps = {
   offer: Offer;
@@ -10,6 +13,12 @@ type CardComponentProps = {
 function CardComponent (props: CardComponentProps) {
   const { offer, onMouseEnter, onMouseLeave } = props;
   const { id, isFavorite, isPremium, previewImage, price, rating, title, type } = offer;
+  const dispatch = useAppDispatch();
+
+  const handleIsFavorite = () => {
+    dispatch(fetchPostFavOffers(offer));
+    dispatch(setFavoritesCity(offer.city.name));
+  };
 
   return(
     <article className="cities__card place-card" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
@@ -25,8 +34,7 @@ function CardComponent (props: CardComponentProps) {
             <b className="place-card__price-value">€{price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          {(isFavorite && <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button"><svg className="place-card__bookmark-icon" width={18} height={19}><use xlinkHref="#icon-bookmark" /></svg><span className="visually-hidden">To bookmarks</span></button>)
-          || <button className="place-card__bookmark-button button" type="button"><svg className="place-card__bookmark-icon" width={18} height={19}><use xlinkHref="#icon-bookmark" /></svg><span className="visually-hidden">To bookmarks</span></button>}
+          <button className={`place-card__bookmark-button place-card__bookmark-button${isFavorite ? '--active button' : ' button'}`} type="button" onClick={handleIsFavorite}><svg className="place-card__bookmark-icon" width={18} height={19}><use xlinkHref="#icon-bookmark" /></svg><span className="visually-hidden">To bookmarks</span></button>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">

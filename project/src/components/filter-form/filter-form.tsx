@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SortingValues } from '../../const';
-import { setSortingValue } from '../../store/action';
+import { setSortingValue } from '../../store/actions';
 import { useAppDispatch } from '../../hooks';
 
 type FilterFormComponentProps = {
@@ -16,7 +16,6 @@ function FilterFormComponent({currentValue}: FilterFormComponentProps) {
   };
 
   const handleSortingValues = (value: string) => {
-
     if(value) {
       dispatch(setSortingValue(value));
     }

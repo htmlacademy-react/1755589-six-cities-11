@@ -48,4 +48,6 @@ export enum ApiRouts {
   Offers = '/hotels',
   Login = '/login',
   Logout = '/logout',
+  Favorites = '/favorite',
+  Comments = '/comments'
 }

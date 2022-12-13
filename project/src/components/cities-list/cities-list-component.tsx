@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
-import { setCity } from '../../store/action';
+import { setCity } from '../../store/actions';
 
 type CitiesListComponentProps = {
   citiesList: string[];

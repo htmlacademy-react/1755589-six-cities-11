@@ -1,27 +1,39 @@
-import { HTMLAttributes } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import CommentForm from '../../components/comment-form/comment-form';
 import NearbyOffersList from '../../components/nearby-offers-list/nearby-offers-list';
 import ReviewsList from '../../components/reviews/reviews-list';
 import MapComponent from '../../components/map-component/map-component';
-import { Comment } from '../../types/comment';
-import { Offer } from '../../types/offer';
 import { getRating } from '../../utils/index';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import LoginHeaderComponent from '../../components/login/login-header-component';
+import { fetchAllDatas, fetchPostFavOffers } from '../../store/api-actions';
+import { setDataOffersLoadingStatus, setFavoritesCity} from '../../store/actions';
+import Spinner from '../spinner/spinner';
+import NotFoundPage from '../404/not-found-page';
+import { AuthStatuses } from '../../const';
 
-type RoomPageProps = {
-  comments: Comment[];
-  nearbyOffers: Offer[];
-} & HTMLAttributes<HTMLTextAreaElement>
-
-function RoomPage( props: RoomPageProps) {
-  const { comments, nearbyOffers } = props;
+function RoomPage() {
   const { id } = useParams<{id:string}>();
-  const offers = useAppSelector((state) => state.offers);
-  const theOffer = offers.find((offer) => offer.id.toString() === id);
+  const theOffer = useAppSelector((state) => state.offer);
+  const isAuthStatus = useAppSelector((state) => state.authorizationStatus);
+  const comments = useAppSelector((state) => state.comments);
+  const nearbyOffers = useAppSelector((state) => state.nearbyOffers);
+  const isDataOffersLoading = useAppSelector((state) => state.isDataOffersLoading);
+  const isError = useAppSelector((state) => state.error);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAllDatas(id as string));
+    dispatch(setDataOffersLoadingStatus(true));
+  }, [dispatch, id]);
 
   if (!theOffer) {
     return null;
+  }
+
+  if (isError) {
+    return <NotFoundPage/>;
   }
 
   return(
@@ -30,27 +42,11 @@ function RoomPage( props: RoomPageProps) {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link" href="main.html">
+              <Link to='/' className="header__logo-link">
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width={81} height={41} />
-              </a>
+              </Link>
             </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            <LoginHeaderComponent authStatus={isAuthStatus}/>
           </div>
         </div>
       </header>
@@ -66,7 +62,12 @@ function RoomPage( props: RoomPageProps) {
               {theOffer.isPremium && <div className="property__mark"><span>Premium</span></div>}
               <div className="property__name-wrapper">
                 <h1 className="property__name">{theOffer.title}</h1>
-                <button className="property__bookmark-button button" type="button">
+                <button className="property__bookmark-button button" type="button" onClick={(evt) => {
+                  evt.preventDefault();
+                  dispatch(fetchPostFavOffers(theOffer));
+                  dispatch(setFavoritesCity(theOffer.city.name));
+                }}
+                >
                   <svg className="property__bookmark-icon" width={31} height={33}>
                     <use xlinkHref="#icon-bookmark" />
                   </svg>
@@ -122,12 +123,14 @@ function RoomPage( props: RoomPageProps) {
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">Reviews · <span className="reviews__amount">{comments.length}</span></h2>
-                <ReviewsList comments={comments}/>
-                <CommentForm/>
+                {!isDataOffersLoading ?
+                  <Spinner/> :
+                  comments.length > 0 && <ReviewsList comments={comments}/>}
+                {isAuthStatus === AuthStatuses.Auth && <CommentForm/>}
               </section>
             </div>
           </div>
-          <section className="property__map map" style={{display: 'flex', justifyContent: 'center'}}><MapComponent offers={nearbyOffers} height={600} width={1200} /></section>
+          <section className="property__map map" style={{display: 'flex', justifyContent: 'center'}}>{nearbyOffers.length > 0 && <MapComponent offers={nearbyOffers.concat(theOffer)} activeCard={theOffer.id} height={600} width={1200} />}</section>
         </section>
         <div className="container">
           <section className="near-places places">
@@ -137,7 +140,6 @@ function RoomPage( props: RoomPageProps) {
         </div>
       </main>
     </div>
-
   );
 }
 

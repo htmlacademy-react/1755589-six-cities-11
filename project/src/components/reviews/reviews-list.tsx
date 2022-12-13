@@ -6,11 +6,11 @@ type ReviewsListProps = {
 }
 
 function ReviewsList({comments}: ReviewsListProps) {
-
+  const sortedComments = [...comments].sort((comment1, comment2) => new Date(comment1.date).getTime() - new Date(comment2.date).getTime());
 
   return(
     <ul className="reviews__list">
-      {comments.map((comment) => <ReviewsItem key={comment.id} itemComment={comment}/>)}
+      {sortedComments.map((comment) => <ReviewsItem key={comment.id} itemComment={comment}/>)}
     </ul>
   );
 }

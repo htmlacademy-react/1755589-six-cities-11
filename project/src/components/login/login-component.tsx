@@ -1,12 +1,20 @@
-import { useRef, FormEvent } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useRef, FormEvent, useEffect } from 'react';
+import { CITIES_LIST } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
 import { AuthData } from '../../types/auth-data';
+import { setCity } from '../../store/actions';
+import { Link } from 'react-router-dom';
 
 function LoginComponent() {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
+  const city = useAppSelector((state) => state.activeCity);
+
+  useEffect(() => {
+    dispatch(setCity(CITIES_LIST[0]));
+  }, [dispatch]);
 
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
@@ -26,20 +34,20 @@ function LoginComponent() {
         <form className="login__form form" action="" onSubmit={handleOnSubmit}>
           <div className="login__input-wrapper form__input-wrapper">
             <label className="visually-hidden">E-mail</label>
-            <input ref={emailRef} className="login__input form__input" type="email" name="email" placeholder="Email" required />
+            <input ref={emailRef} className="login__input form__input" type="email" name="email" placeholder="Email" required pattern="/[a-Z\d]+/" />
           </div>
           <div className="login__input-wrapper form__input-wrapper">
             <label className="visually-hidden">Password</label>
-            <input ref={passRef}className="login__input form__input" type="password" name="password" placeholder="Password" required />
+            <input ref={passRef} className="login__input form__input" type="password" name="password" placeholder="Password" required pattern="/[a-Z\d]+/" />
           </div>
           <button className="login__submit form__submit button" type="submit">Sign in</button>
         </form>
       </section>
       <section className="locations locations--login locations--current">
         <div className="locations__item">
-          <a className="locations__item-link" href="#">
-            <span>Amsterdam</span>
-          </a>
+          <Link to={'/'}className="locations__item-link" >
+            <span>{city}</span>
+          </Link>
         </div>
       </section>
     </div>

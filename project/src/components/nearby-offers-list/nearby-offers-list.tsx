@@ -6,7 +6,6 @@ type NearbyOffersListProps = {
 }
 
 function NearbyOffersList({offers}: NearbyOffersListProps) {
-
   return(
     <div className="near-places__list places__list">
       {offers.map((offer) => <CardComponent offer={offer} key={offer.id}/>)}

@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import useMap from '../../hooks/use-map';
-import { Offer } from '../../types/offer';
 import 'leaflet/dist/leaflet.css';
 import { Icon, Marker } from 'leaflet';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
+import { Offer } from '../../types/offer';
 
 type MapComponentProps = {
   offers: Offer[];
@@ -48,10 +48,13 @@ function MapComponent({ offers, activeCard, height, width}: MapComponentProps) {
               : defaultCustomIcon
           )
           .addTo(map);
+
         map.flyTo({lat: offer.city.location.latitude, lng: offer.city.location.longitude});
+
       });
     }
   }, [map, activeCard, offers]);
+
   return(
     <div
       style={{height: `${height}px`, width: width ? `${width}px` : 'auto'}}
