@@ -62,13 +62,13 @@ function RoomPage() {
               {theOffer.isPremium && <div className="property__mark"><span>Premium</span></div>}
               <div className="property__name-wrapper">
                 <h1 className="property__name">{theOffer.title}</h1>
-                <button className="property__bookmark-button button" type="button" onClick={(evt) => {
+                <button className={`property__bookmark-button button ${theOffer.isFavorite ? 'property__bookmark-button--active' : ''}`} type="button" onClick={(evt) => {
                   evt.preventDefault();
                   dispatch(fetchPostFavOffers(theOffer));
                   dispatch(setFavoritesCity(theOffer.city.name));
                 }}
                 >
-                  <svg className="property__bookmark-icon" width={31} height={33}>
+                  <svg className="property__bookmark-icon place-card__bookmark-icon" width={31} height={33}>
                     <use xlinkHref="#icon-bookmark" />
                   </svg>
                   <span className="visually-hidden">To bookmarks</span>

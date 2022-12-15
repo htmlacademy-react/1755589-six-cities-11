@@ -38,7 +38,7 @@ function LoginComponent() {
           </div>
           <div className="login__input-wrapper form__input-wrapper">
             <label className="visually-hidden">Password</label>
-            <input ref={passRef} className="login__input form__input" type="password" name="password" placeholder="Password" required pattern="/[a-Z\d]+/" />
+            <input ref={passRef} className="login__input form__input" type="password" name="password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z]).{2,}" />
           </div>
           <button className="login__submit form__submit button" type="submit">Sign in</button>
         </form>

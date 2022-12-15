@@ -11,7 +11,7 @@ type CardComponentProps = {
 } & HTMLAttributes<HTMLTitleElement>
 
 function CardComponent (props: CardComponentProps) {
-  const { offer, onMouseEnter, onMouseLeave } = props;
+  const { offer, onMouseEnter, onMouseLeave, onClick } = props;
   const { id, isFavorite, isPremium, previewImage, price, rating, title, type } = offer;
   const dispatch = useAppDispatch();
 
@@ -21,7 +21,7 @@ function CardComponent (props: CardComponentProps) {
   };
 
   return(
-    <article className="cities__card place-card" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <article className="cities__card place-card" onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {isPremium && <div className="place-card__mark"><span>Premium</span></div>}
       <div className="cities__image-wrapper place-card__image-wrapper">
         <Link to={`/offer/${id}`}>
